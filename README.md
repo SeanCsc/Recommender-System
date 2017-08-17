@@ -1,6 +1,8 @@
 # Recommender-System
 MapReduce Implementation of Movie Recommender System
 
+Data source: [Netflix Prize Data Set][link1]
+
 Original Input:
 
 | User ID | Movie ID | Rating |
@@ -24,3 +26,5 @@ Original Input:
 ![input](./Other/input.png)
 
 ![process](./Other/multiplication.png)
+
+[link1]: http://academictorrents.com/details/9b13183dc4d60676b773c9e2cd6de5e5542cee9a
