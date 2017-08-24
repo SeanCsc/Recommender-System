@@ -33,7 +33,7 @@ Original Input:
 + MapReduce Job 1:
     - Mapper: read raw input information
         - input: userID, movieID, rating
-        - output: < key=userID, value=movidID: rating >
+        - output: < key=userID, value=movieID: rating >
     - Reducer: merge the output from Mapper according to unique userID
         - input: < key=userID, value=< movie1: rating1, movie2: rating2, ... > >
         - output: < key=userID, value="movie1: rating1, movie2: rating2, ..." >
@@ -63,7 +63,7 @@ Original Input:
         - output: < key=movie_B, value="movie_A=ratio" >
     - Mapper 2: read the original user rating information to build the rating matrix
         - input: userID, movieID, rating
-        - output: < key=movie_B, value="userID: rating">
+        - output: < key=movie_B, value="userID: rating" >
     - Reducer:
         - input: < key=movie_B, value="movie_A=ratio1, movie_C=ratio2, ..., user1: rating1, user2: rating2, ..." >
         - output: < key="userID: movieID", value=ratio * rating >
