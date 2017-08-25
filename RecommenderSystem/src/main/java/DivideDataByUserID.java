@@ -10,7 +10,6 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 public class DivideDataByUserID {
     public static class DivideDataMapper extends Mapper<LongWritable, Text, IntWritable, Text> {

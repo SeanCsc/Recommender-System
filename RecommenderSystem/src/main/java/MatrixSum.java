@@ -12,22 +12,30 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import java.io.IOException;
 
 public class MatrixSum {
-    public static class SumMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
+    public static class SumMapper extends Mapper<LongWritable, Text, Text, DoubleWritable> {
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             // input: userID: movieID \t ratio * rating
             // output: < key="userID: movieID", value=ratio * rating >
 
+            String[] tokens = value.toString().trim().split("\t");
+            context.write(new Text(tokens[0]), new DoubleWritable(Double.parseDouble(tokens[1])));
         }
     }
 
-    public static class  SumReducer extends Reducer<IntWritable, Text, IntWritable, Text> {
+    public static class  SumReducer extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
         @Override
-        public void reduce(IntWritable key, Iterable<Text> values, Context context)
+        public void reduce(Text key, Iterable<DoubleWritable> values, Context context)
                 throws IOException, InterruptedException {
             // input: < key="userID: movieID", value=< subRating1, subRating2, ... > >
             // output: < key="userID: movieID", value=rating prediction >
 
+            double sum = 0;
+            for (DoubleWritable value: values) {
+                sum += value.get();
+            }
+
+            context.write(key, new DoubleWritable(sum));
         }
     }
 
@@ -42,8 +50,8 @@ public class MatrixSum {
 
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
-        job.setOutputKeyClass(IntWritable.class);
-        job.setOutputValueClass(Text.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(DoubleWritable.class);
 
         TextInputFormat.setInputPaths(job, new Path(args[0]));
         TextOutputFormat.setOutputPath(job, new Path(args[1]));

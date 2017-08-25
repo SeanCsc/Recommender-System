@@ -18,16 +18,16 @@ Original Input:
 ## Workflow
 <img src="./Other/workflow.png" width=600>
 
-<img src="./Other/input.png" width=500>
+<img src="./Other/input.png" width=600>
 
-<img src="./Other/multiplication.png" width=500>
+<img src="./Other/multiplication.png" width=600>
 
 ## Explanation
-| MapReduce Jobs |             Goal and Functions                   | File name  |
-| -------------- | ------------------------------------------------ | ---------- |
-| 1 & 2          | Build the original co-occurrence matrix          |            |
-| 3              | Normalize the co-occurrence matrix               |            |
-| 4 & 5          | Multiply co-occurrence matrix with rating matrix |            |
+| MapReduce Jobs |             Goal and Functions                                       | File name                                         |
+| -------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
+| 1 & 2          | Build the original co-occurrence matrix                              | DivideDataByUserID.java & CooccurrenceMatrix.java |
+| 3              | Normalize the co-occurrence matrix                                   | Normalization.java                                |
+| 4 & 5          | Multiply co-occurrence matrix with rating matrix to make predictions | MatrixMultiplication.java & MatrixSum.java        |
 
 
 + MapReduce Job 1:
