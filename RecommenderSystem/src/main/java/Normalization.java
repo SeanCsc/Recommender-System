@@ -42,14 +42,21 @@ public class Normalization {
                 movieCountMap.put(movieCount[0], count);
             }
 
-            Iterator iterator = movieCountMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iterator.next();
+            for (Map.Entry<String, Integer> entry: movieCountMap.entrySet()) {
                 // key: movieB
                 // value: count
                 double ratio = (double) entry.getValue() / denominator;
                 context.write(new Text(entry.getKey()), new Text(key + "=" + ratio));
             }
+
+//            Iterator iterator = movieCountMap.entrySet().iterator();
+//            while (iterator.hasNext()) {
+//                Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iterator.next();
+//                // key: movieB
+//                // value: count
+//                double ratio = (double) entry.getValue() / denominator;
+//                context.write(new Text(entry.getKey()), new Text(key + "=" + ratio));
+//            }
         }
     }
 
