@@ -49,25 +49,30 @@ public class Normalization {
                 context.write(new Text(entry.getKey()), new Text(key + "=" + ratio));
             }
 
-//            Iterator iterator = movieCountMap.entrySet().iterator();
-//            while (iterator.hasNext()) {
-//                Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iterator.next();
-//                // key: movieB
-//                // value: count
-//                double ratio = (double) entry.getValue() / denominator;
-//                context.write(new Text(entry.getKey()), new Text(key + "=" + ratio));
-//            }
+            /* Another choice
+            Iterator iterator = movieCountMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iterator.next();
+                // key: movieB
+                // value: count
+                double ratio = (double) entry.getValue() / denominator;
+                context.write(new Text(entry.getKey()), new Text(key + "=" + ratio));
+            }
+            */
         }
     }
 
     public static void main(String[] args) throws Exception {
-        Configuration conf = new Configuration();
 
-        Job job = Job.getInstance(conf);
-        job.setMapperClass(NormalizeMapper.class);
-        job.setReducerClass(NormalizeReducer.class);
+        // args[0]: un-normalized cooccurrence matrix folder, e.g., /coOccurrenceMatrix
+        // args[1]: normalized cooccurrence matrix folder, e.g., /Normalize
+
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf, "Normalize Cooccurrence Matrix");
 
         job.setJarByClass(Normalization.class);
+        job.setMapperClass(NormalizeMapper.class);
+        job.setReducerClass(NormalizeReducer.class);
 
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);

@@ -56,13 +56,16 @@ public class CooccurrenceMatrix {
     }
 
     public static void main(String[] args) throws Exception {
-        Configuration conf = new Configuration();
 
-        Job job = Job.getInstance(conf);
-        job.setMapperClass(CooccurrenceMapper.class);
-        job.setReducerClass(CooccurrenceReducer.class);
+        // args[0]: data divided by user folder, e.g., /dataDividedByUser
+        // args[1]: un-normalized cooccurrence matrix folder, e.g., /coOccurrenceMatrix
+
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf, "Build Cooccurrence Matrix");
 
         job.setJarByClass(CooccurrenceMatrix.class);
+        job.setMapperClass(CooccurrenceMapper.class);
+        job.setReducerClass(CooccurrenceReducer.class);
 
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);

@@ -47,13 +47,16 @@ public class DivideDataByUserID {
     }
 
     public static void main(String[] args) throws Exception {
-        Configuration conf = new Configuration();
 
-        Job job = Job.getInstance(conf);
-        job.setMapperClass(DivideDataMapper.class);
-        job.setReducerClass(DivideDataReducer.class);
+        // args[0]: original user rating folder, e.g., /input
+        // args[1]: output of the data divided by userID, e.g., /dataDividedByUser
+
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf, "Divide Input By User");
 
         job.setJarByClass(DivideDataByUserID.class);
+        job.setMapperClass(DivideDataMapper.class);
+        job.setReducerClass(DivideDataReducer.class);
 
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);

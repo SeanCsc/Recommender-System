@@ -15,6 +15,17 @@ Original Input:
 |    4    |   1000   |  3.0   |
 | ....... | ........ | ...... |
 
+## Run code
+    $: cd RecommenderSystem/
+    $: hdfs dfs -mkdir /input
+    $: hdfs dfs -put input/* /input
+    $: cd src/main/java/
+    $: hadoop com.sun.tools.javac.Main -d class/ *.java
+    $: cd class/
+    $: jar cf recommender.jar *.class
+    $: hadoop jar recommender.jar Driver /input /dataDividedByUser /coOccurrenceMatrix /Normalize /averageRating /Multiplication /Sum
+    $: hdfs dfs -cat /Sum/*
+
 ## Workflow
 <img src="./Other/workflow.png" width=600>
 
@@ -27,7 +38,8 @@ Original Input:
 | -------------- | -------------------------------------------------------------------- | ------------------------------------------------- |
 | 1 & 2          | Build the original co-occurrence matrix                              | DivideDataByUserID.java & CooccurrenceMatrix.java |
 | 3              | Normalize the co-occurrence matrix                                   | Normalization.java                                |
-| 4 & 5          | Multiply co-occurrence matrix with rating matrix to make predictions | MatrixMultiplication.java & MatrixSum.java        |
+| 4              | Calculate the user average rating                                    | AverageRating.java                                |
+| 5 & 6          | Multiply co-occurrence matrix with rating matrix to make predictions | MatrixMultiplication.java & MatrixSum.java        |
 
 
 + MapReduce Job 1:
@@ -58,6 +70,15 @@ Original Input:
 
 
 + MapReduce Job 4:
+    - Mapper: read the original user rating information
+        - input: userID, movieID, rating
+        - output: < key=userID, value=rating >
+    - Reducer: merge the output from Mapper according to unique userID
+        - input: < key=userID, value=< rating1, rating2, ... > >
+        - output: < key=userID, value=< average rating > >
+
+
++ MapReduce Job 5:
     - Mapper 1: read co-occurrence matrix from MapReduce Job 3
         - input: movie_B \t movie_A=ratio
         - output: < key=movie_B, value="movie_A=ratio" >
@@ -67,20 +88,16 @@ Original Input:
     - Reducer:
         - input: < key=movie_B, value="movie_A=ratio1, movie_C=ratio2, ..., user1: rating1, user2: rating2, ..." >
         - output: < key="userID: movieID", value=ratio * rating >
+        - setup: read the user average rating
 
 
-+ MapReduce Job 5:
++ MapReduce Job 6:
     - Mapper: read the output from MapReduce Job 4
         - input: userID: movieID \t ratio * rating
         - output: < key="userID: movieID", value=ratio * rating >
     - Reducer:
         - input: < key="userID: movieID", value=< subrating1, subrating2, ... > >
         - output:< key="userID: movieID", value=rating prediction >
-
-
-
-
-
 
 
 [link1]: http://academictorrents.com/details/9b13183dc4d60676b773c9e2cd6de5e5542cee9a
