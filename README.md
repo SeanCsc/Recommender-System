@@ -61,7 +61,7 @@ Original Input:
 
 
 + MapReduce Job 3:
-    - Mapper: read output from MapReduce job 1 and split
+    - Mapper: read output from MapReduce job 2 and split
         - input: movie_A: movie_B \t count
         - output: < key=movie_A, value="movie_B=count" >
     - Reducer: calculate the normalized co-occurrence matrix value
@@ -92,7 +92,7 @@ Original Input:
 
 
 + MapReduce Job 6:
-    - Mapper: read the output from MapReduce Job 4
+    - Mapper: read the output from MapReduce Job 5
         - input: userID: movieID \t ratio * rating
         - output: < key="userID: movieID", value=ratio * rating >
     - Reducer:
